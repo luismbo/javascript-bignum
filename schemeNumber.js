@@ -1184,7 +1184,15 @@ SchemeNumber.fn = {
     http://www.r6rs.org/final/html/r6rs/r6rs-Z-H-14.html#node_idx_586>
 
     See Also: <fn["number->string"](z, radix)>.
+
+    Function: fn.random(limit)
+    Returns a pseudo-random number that is a non-negative number less
+    than limit and of the same type as limit. Limit is a positive integer,
+    or a positive float.
+
 */
+
+    random : fn_random,
 
     "eqv?"      : fn_isEqv,
     "number?"   : fn_isNumber,
@@ -1399,6 +1407,13 @@ function args2(a) { a.length === 2 || wrongArgCount(2, a); }
 
 function args1plus(a) { a.length > 0 || wrongArgCount("1 or more", a); }
 function args2plus(a) { a.length > 1 || wrongArgCount("2 or more", a); }
+
+function fn_random(limit) {
+  args1(arguments);
+  assert(limit.SN_isPositive(limit) && (limit.SN_isInteger() || limit.SN_isInexact()));
+  var rnd = SN.fn["*"](SN(Math.random()), limit);
+  return SN.fn["exact?"](limit) ? SN.fn.floor(rnd) : rnd;
+}
 
 function fn_isEqv(a, b) {
     arguments.length === 2 || args2(arguments);
